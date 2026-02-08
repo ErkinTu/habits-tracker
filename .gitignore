@@ -1,2 +1,31 @@
-server/.venv
-server/.idea
+### --- Django Server Settings --- ###
+
+# Базы данных (на случай, если вдруг появится sqlite)
+server/**/*.sqlite3
+
+# Конфиденциальные файлы (самое важное!)
+server/.env
+
+# Python кэш и байт-код
+server/**/__pycache__/
+server/**/*.py[cod]
+server/**/*.$py.class
+
+# Виртуальное окружение (если оно внутри папки server)
+server/venv/
+server/env/
+server/.venv/
+
+# Статические файлы и медиа (обычно не хранятся в git)
+server/staticfiles/
+server/media/
+
+# Логи
+server/*.log
+
+# Папки IDE (PyCharm, VS Code)
+.idea/
+.vscode/
+
+# Прочее
+server/.DS_Store
