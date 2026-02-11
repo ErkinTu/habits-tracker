@@ -1,5 +1,5 @@
 # Основной файл конфигурации Django проекта
-
+import logging
 # Импорт библиотек
 from pathlib import Path
 from dotenv import load_dotenv
@@ -183,3 +183,56 @@ else:
 # Базовые настройки безопасности
 SECURE_CONTENT_TYPE_NOSNIFF = True # Запрещает MIME-sniffing
 X_FRAME_OPTIONS = "DENY" # Защита от Clickjacking
+
+# Настройка логирования
+LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
+LOG_FILE = BASE_DIR / "debug.log"  # Общий лог-файл проекта
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": { # Форматирование
+        "standard": {
+            "format": "%(asctime)s | %(levelname)s | %(name)s:%(lineno)d | %(message)s",
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": LOG_LEVEL,
+            "formatter": "standard",
+        },
+        "file": {
+            # Защита от бесконечного роста файла
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "standard",
+            "filename": str(LOG_FILE),
+            "maxBytes": 10 * 1024 * 1024,  # 10MB
+            "backupCount": 5,
+        },
+    },
+
+    # root ловит всё "мимо" именованных логгеров
+    "root": {
+        "handlers": ["console"] if DEBUG else ["file"],
+        "level": LOG_LEVEL,
+    },
+
+    "loggers": {
+        # Базовые логи Django
+        "django": {
+            "handlers": ["console"] if DEBUG else ["file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # 500 ошибки запросов
+        "django.request": {
+            "handlers": ["console"] if DEBUG else ["file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
