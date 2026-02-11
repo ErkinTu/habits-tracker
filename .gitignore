@@ -22,6 +22,9 @@ server/media/
 
 # Логи
 server/*.log
+server/*.log.*
+server/debug.log
+server/debug.log.*
 
 # Папки IDE (PyCharm, VS Code)
 .idea/
